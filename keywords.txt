@@ -1,0 +1,16 @@
+#################################################
+# Syntax Coloring Map For MemoryFree Arduino Library
+# http://hardwarefun.com/projects/memory-free
+#################################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+rotenc_init	KEYWORD2
+rotenc_set_step KEYWORD2
+rd_pressed	KEYWORD2
