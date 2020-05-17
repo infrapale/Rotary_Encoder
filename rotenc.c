@@ -9,11 +9,9 @@ void irq_rotenc_press(void);
 
 #define LED 13
 static volatile int position;
-static volatile uint8_t slow_down = 0;
-static volatile uint8_t ups = 0;
-static volatile uint8_t downs = 0;
 static volatile int max_pos = 100;
 static volatile int min_pos = 0;
+static volatile int direction = 1;
 static volatile unsigned long int last_not_pressed_time;
 static volatile uint8_t pressed_state = 1;
 static volatile uint8_t pressed_value = 0;
@@ -35,13 +33,13 @@ void rotenc_init(uint8_t _inpA, uint8_t _inpB, uint8_t _inpC)
     attachInterrupt(digitalPinToInterrupt(inpA), irq_rotenc_rot, RISING);
 	attachInterrupt(digitalPinToInterrupt(inpC), irq_rotenc_press, CHANGE);
 }
-void rotenc_set_step(int _pos, int _min, int _max, uint8_t _slow_down){
+void rotenc_set_step(int _pos, int _min, int _max, int _direction){
 	position = _pos;
 	min_pos = _min;
 	max_pos = _max;
-	slow_down = _slow_down;
+	direction = _direction;
 } 
-int get_pos(void)
+int rotenc_get_pos(void)
 {
 	return(position);
 }
@@ -49,20 +47,16 @@ int get_pos(void)
 void irq_rotenc_rot(void)
 {
     if(digitalRead(inpB)){
-        ups++;
+        position += direction;
     } else  {
-        downs++;
+        position -= direction;
     }
-    if (ups > slow_down ){
-        if (position < max_pos) position++;
-        ups = 0; downs = 0;
-    } else if (downs > slow_down) {
-        if (position > min_pos) position--;
-        ups = 0; downs = 0;
-    }
+	if( position > max_pos) position = max_pos;
+	if( position < min_pos) position = min_pos;
+	
 }
 
-uint8_t rd_pressed(void){
+uint8_t rotenc_rd_pressed(void){
 	uint8_t tmp = pressed_value;
 	pressed_value = 0;
 	return(tmp);

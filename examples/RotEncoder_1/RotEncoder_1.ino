@@ -41,7 +41,7 @@ void loop()
 {
   int last_pos = 0;
   while(true){
-    position = get_pos();
+    position = rotenc_get_pos();
     if(position != last_pos){
       Serial.print(last_pos);
       Serial.print(" ");
@@ -55,7 +55,7 @@ void loop()
       }
       last_pos = position;
     }
-    uint8_t pressed = rd_pressed();
+    uint8_t pressed = rotenc_rd_pressed();
     if(pressed != 0){
         Serial.println(pressed);
     }
